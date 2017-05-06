@@ -149,6 +149,7 @@ box.addTo(world);
 box1.addTo(world);
 
 //box1.applyCentralImpulse(0); // unusual behaviour box1 disappears
+//box1.applyCentralImpulse({x: 2000, y:200, z: 200}); // <- this works
 //applyCentralImpulse
 //sphere.addTo(world);
 plane.addTo(world);
