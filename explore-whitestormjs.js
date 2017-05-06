@@ -114,9 +114,11 @@ const box = new WHS.Box({
 // https://github.com/WhitestormJS/physics-module-ammonext/blob/master/src/modules/WorldModule.js#L487
 fnCollide = function(otherObject, v, r, contactNormal)
 {
-  // both do not work
-  //setLinearVelocity(200);  
-  //otherObject.applyCentralForce(200);
+    // None work
+ window.alert("Contact");
+  //otherObject.setLinearVelocity(new Vector3(0,200,200));  
+  //otherObject.setLinearVelocity({x: 2000, y:200, z: 200});//new Vector3(0,200,200));
+ otherObject.applyCentralImpulse({x: 200, y:200, z: 200});
 }
 
 box.on('collision', fnCollide);
@@ -150,6 +152,8 @@ box1.addTo(world);
 //applyCentralImpulse
 //sphere.addTo(world);
 plane.addTo(world);
+
+window.alert("Starting...");
 
 world.start(); // Start animations and physics simulation.
 world.setControls(new WHS.OrbitControls());
