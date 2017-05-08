@@ -1,14 +1,39 @@
-//Try on http://codepen.io/Rick2047/pen/NjwqmO
+const cameraO = new WHS.OrthographicCamera({
+  camera: {
+    far: 10000
+  },
+
+  position: {
+    x: 10,
+      y: 1000,
+      z: 0
+  }
+});
+
+const cameraP = new WHS.PerspectiveCamera({
+  camera: {
+    fov: 100,
+    aspect: window.innerWidth / window.innerHeight
+  },
+
+  // position: {
+  //   x: 10,
+  //   y: 1000,
+  //   z: 0
+  // }
+});
 
 const app = new WHS.App([
   new WHS.app.ElementModule(),
   new WHS.app.SceneModule(),
+  //cameraP,
   new WHS.app.CameraModule({
+   cameraO,
     position: {
-      x: 400,
-      y: 0,
-      z: 0
-    }
+    x: 10,
+    y: 1000,
+    z: 0
+  }
   }),
   new WHS.app.RenderingModule({
     bgColor: 0x162129,
@@ -26,26 +51,41 @@ const app = new WHS.App([
   new WHS.controls.OrbitModule()
 ]);
 
-// Sphere
-const sphere = new WHS.Sphere({ // Create sphere comonent.
-  geometry: {
-    radius: 5,
-    widthSegments: 32,
-    heightSegments: 32
-  },
+// const camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, - 500, 1000 );
+
+// const camera = new WHS.OrthographicCamera({
+//   camera: {
+//     far: 10000
+//   },
+
+//   position: {
+//     x: 10,
+//       y: 1000,
+//       z: 0
+//   }
+//});
+
+//cameraP.addTo(app);
+// // Sphere
+// const sphere = new WHS.Sphere({ // Create sphere comonent.
+//   geometry: {
+//     radius: 5,
+//     widthSegments: 32,
+//     heightSegments: 32
+//   },
   
-  modules: [
-    new PHYSICS.SphereModule({
-      mass: 10
-    })
-  ],
+//   modules: [
+//     new PHYSICS.SphereModule({
+//       mass: 10
+//     })
+//   ],
 
-  material: new THREE.MeshPhongMaterial({
-    color: 0xF2F2F2
-  }),
+//   material: new THREE.MeshPhongMaterial({
+//     color: 0xF2F2F2
+//   }), 
 
-  position: new THREE.Vector3(0, 15, 0)
-});
+//   position: new THREE.Vector3(0, 15, 0)
+// });
 
 //sphere.addTo(app);
 
@@ -58,7 +98,8 @@ new WHS.Plane({
   
   modules: [
     new PHYSICS.PlaneModule({
-      mass: 0
+      mass: 0,
+      friction: 1
     })
   ],
 
@@ -78,7 +119,7 @@ const box = new WHS.Box({
   
   modules: [
     new PHYSICS.BoxModule({
-      mass: 10,
+      mass: 20
       //friction: 0
     })
   ],
@@ -91,13 +132,13 @@ const conveyor = new WHS.Box({
   geometry: {
     width: 100,
     height: 2,
-    depth: 1000
+    depth: 5000
   },
   
   modules: [
     new PHYSICS.BoxModule({
       mass: 1000,
-      friction: 0.8
+      friction: 0
     })
   ],
   
@@ -105,10 +146,16 @@ const conveyor = new WHS.Box({
 });
 conveyor.on('collision', (otherObject, v, r, contactNormal) => {
   //window.alert("Contact");
-  otherObject.component.applyCenterImpulse(new THREE.Vector3(0, 0, 160));//new Vector3(2000,0,0));//{x: 20000, y:0, z: 0});
+  otherObject.component.setLinearVelocity(new THREE.Vector3(0, 0, 160));//new Vector3(2000,0,0));//{x: 20000, y:0, z: 0});
 });
+
+
+const box2 = box.clone();
+box2.position.y += 50;
+box2.addTo(app);
 conveyor.addTo(app); 
 box.addTo(app);
+//app.camera.component.lookAt(box.position)
 // Lights
 new WHS.PointLight({
   light: {
